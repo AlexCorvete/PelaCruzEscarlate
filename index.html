@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pela Cruz Escarlate — Álbum Oficial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  <style>
+    :root {
+      --gold: #d4af37;
+      --gold-soft: rgba(212, 175, 55, 0.45);
+      --crimson: #8b1e1e;
+      --crimson-glow: #c82824;
+      --text: #f6f2e9;
+      --text-dim: #e3dcd0;
+      --panel-bg: rgba(10, 12, 18, 0.72);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'EB Garamond', Georgia, serif;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #0b0d12;
+      position: relative;
+    }
+
+    /* Imagem de fundo normal: sem desfoque e sem escurecimento */
+    .album-backdrop {
+      position: fixed;
+      inset: 0;
+      background-image: url('./imagens/capa-album.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+    }
+
+    header {
+      text-align: center;
+      padding: 16px 20px 6px;
+      z-index: 2;
+    }
+
+    header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.35rem, 2.5vw, 2.05rem);
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 22px rgba(0, 0, 0, 0.75);
+    }
+
+    header p {
+      font-size: 0.96rem;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-top: 2px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+    }
+
+    .app-main {
+      width: 100%;
+      max-width: 980px;
+      padding: 4px 20px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      z-index: 2;
+    }
+
+    /* ================= DESKTOP: SLIDER 1:1 MENOR E MAIS ABAIXO ================= */
+    .desktop-player {
+      width: 100%;
+      max-width: 780px;
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .swiper.mySwiper {
+      width: 100%;
+      padding-top: 10px;
+      padding-bottom: 32px;
+    }
+
+    .swiper-slide {
+      width: 196px;
+      height: 196px;
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      background: #11131a;
+      border: 2px solid var(--gold-soft);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.78);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .swiper-slide-active {
+      border-color: var(--gold);
+      box-shadow: 0 0 24px rgba(200, 40, 36, 0.6), 0 14px 32px rgba(0, 0, 0, 0.88);
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .slide-badge {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 8px 6px;
+      background: linear-gradient(to top, rgba(6, 7, 11, 0.88), rgba(6, 7, 11, 0));
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 0.8px;
+      color: var(--gold);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .swiper-slide-active .slide-badge {
+      opacity: 1;
+    }
+
+    .swiper .swiper-button-next,
+    .swiper .swiper-button-prev {
+      color: var(--gold);
+      transform: scale(0.78);
+    }
+
+    .swiper-pagination .swiper-pagination-bullet {
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.55);
+      opacity: 1;
+    }
+
+    .swiper-pagination .swiper-pagination-bullet-active {
+      background: var(--crimson-glow);
+      border: 2px solid var(--gold);
+      transform: scale(1.15);
+    }
+
+    /* ================= MOBILE: FORMATO CLÁSSICO SIMPLES 1:1 ================= */
+    .mobile-player {
+      display: none;
+      width: 100%;
+      max-width: 340px;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 16px;
+      margin-bottom: 10px;
+    }
+
+    .mobile-cover-frame {
+      width: 66vw;
+      max-width: 240px;
+      height: 66vw;
+      max-height: 240px;
+      aspect-ratio: 1 / 1;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid var(--gold);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+      background: #11131a;
+    }
+
+    .mobile-cover-frame img {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* ================= INFORMAÇÕES E CONTROLES COMPARTILHADOS ================= */
+    .track-meta {
+      text-align: center;
+      max-width: 640px;
+      margin-bottom: 10px;
+    }
+
+    .track-counter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.74rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+    }
+
+    .track-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-weight: 800;
+      color: #fff;
+      margin-top: 2px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
+    }
+
+    .track-sub {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--text-dim);
+      margin-top: 1px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+    }
+
+    .player-console {
+      width: 100%;
+      max-width: 480px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--gold-soft);
+      border-radius: 12px;
+      padding: 12px 18px 16px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .time-txt {
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      min-width: 36px;
+      text-align: center;
+    }
+
+    input[type="range"]#seekBar {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 5px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.25);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]#seekBar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.85);
+      cursor: pointer;
+    }
+
+    .cmd-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+
+    .cmd-btn {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .cmd-btn:hover {
+      color: var(--gold);
+      transform: scale(1.12);
+    }
+
+    .cmd-btn svg {
+      width: 26px;
+      height: 26px;
+      fill: currentColor;
+    }
+
+    /* Botão central com a Cruz Escarlate do peito do Templário */
+    .cmd-cross {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(20, 12, 14, 0.88) 0%, rgba(10, 10, 14, 0.72) 100%);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 18px rgba(200, 40, 36, 0.55);
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .cmd-cross:hover {
+      transform: scale(1.08);
+      border-color: #fff;
+      box-shadow: 0 0 26px rgba(200, 40, 36, 0.85), 0 0 12px rgba(212, 175, 55, 0.55);
+    }
+
+    .cmd-cross.is-playing {
+      box-shadow: 0 0 28px rgba(200, 40, 36, 0.9), 0 0 14px rgba(212, 175, 55, 0.65);
+    }
+
+    .cmd-cross svg.templar-cross {
+      width: 40px;
+      height: 40px;
+      filter: drop-shadow(0 0 6px rgba(200, 40, 36, 0.85));
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .cmd-cross.is-playing svg.templar-cross {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 10px rgba(235, 50, 45, 0.95));
+    }
+
+    @media (max-width: 768px) {
+      body {
+        justify-content: flex-start;
+        padding-top: 12px;
+      }
+
+      .desktop-player {
+        display: none;
+      }
+
+      .mobile-player {
+        display: flex;
+      }
+
+      .player-console {
+        padding: 12px 14px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="album-backdrop"></div>
+
+  <header>
+    <h1>Pela Cruz Escarlate</h1>
+    <p>Ópera Sacra Templária • 12 Faixas</p>
+  </header>
+
+  <main class="app-main">
+    <!-- Versão Desktop: Slider 1:1 com 3 capinhas -->
+    <section class="desktop-player" aria-label="Player em Slider">
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper" id="swiperWrapper"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
+
+    <!-- Versão Celular: Formato clássico simples 1:1 -->
+    <section class="mobile-player" aria-label="Player Clássico">
+      <div class="mobile-cover-frame">
+        <img id="mobileCover" src="./imagens/01.jpg" alt="Capa da faixa atual" />
+      </div>
+    </section>
+
+    <!-- Informações da música atual -->
+    <div class="track-meta">
+      <div class="track-counter" id="trackCounter">FAIXA 01 DE 12</div>
+      <div class="track-name" id="trackName">O Pão, a Água e o Abrigo</div>
+      <div class="track-sub" id="trackSub">A Conversão</div>
+    </div>
+
+    <!-- Barra de tempo e comandos -->
+    <div class="player-console">
+      <div class="timeline-row">
+        <span class="time-txt" id="curTime">0:00</span>
+        <input type="range" id="seekBar" min="0" max="100" step="0.1" value="0" aria-label="Progresso da música" />
+        <span class="time-txt" id="durTime">0:00</span>
+      </div>
+
+      <div class="cmd-row">
+        <button class="cmd-btn" id="prevBtn" aria-label="Música anterior">
+          <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+
+        <!-- Botão central: Cruz Escarlate do peito do Templário (Play / Pause) -->
+        <button class="cmd-btn cmd-cross" id="playBtn" aria-label="Tocar ou pausar" title="Tocar / Pausar">
+          <svg class="templar-cross" viewBox="0 0 100 100" aria-hidden="true">
+            <path
+              fill="#b81d1a"
+              stroke="#4a0707"
+              stroke-width="2.5"
+              stroke-linejoin="round"
+              d="M41,6 L59,6 L55,39 L74,20 L86,32 L64,50 L94,43 L94,57 L64,50 L86,68 L74,80 L55,61 L59,94 L41,94 L45,61 L26,80 L14,68 L36,50 L6,57 L6,43 L36,50 L14,32 L26,20 L45,39 Z"
+            />
+            <path
+              id="crossGlowPath"
+              fill="#df2a24"
+              opacity="0.72"
+              d="M44,12 L56,12 L53,42 L72,25 L80,33 L60,50 L88,46 L88,54 L60,50 L80,67 L72,75 L53,58 L56,88 L44,88 L47,58 L28,75 L20,67 L40,50 L12,54 L12,46 L40,50 L20,33 L28,25 L47,42 Z"
+            />
+          </svg>
+        </button>
+
+        <button class="cmd-btn" id="nextBtn" aria-label="Próxima música">
+          <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <audio id="audioEl" preload="metadata"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const playlist = [
+      {
+        num: "01",
+        title: "O Pão, a Água e o Abrigo",
+        sub: "A Conversão",
+        imgs: ["./imagens/01.jpg", "./imagens/01.jpeg"],
+        audio: "./musicas/01 - O Pão, a Água e o Abrigo (A Conversão).mp3"
+      },
+      {
+        num: "02",
+        title: "A Força do Homem",
+        sub: "Os Nomes do Templo",
+        imgs: ["./imagens/02.jpg", "./imagens/02.jpeg"],
+        audio: "./musicas/02 - A Força do Homem (Os Nomes do Templo).mp3"
+      },
+      {
+        num: "03",
+        title: "A Vontade Livre",
+        sub: "Odo de Saint-Amand",
+        imgs: ["./imagens/03.jpeg", "./imagens/03.jpg"],
+        audio: "./musicas/03 - A Vontade Livre (Odo de Saint-Amand).mp3"
+      },
+      {
+        num: "04",
+        title: "A Alma Imóvel",
+        sub: "La Fève",
+        imgs: ["./imagens/04.jpeg", "./imagens/04.jpg"],
+        audio: "./musicas/04 - A Alma Imóvel (La Fève).mp3"
+      },
+      {
+        num: "05",
+        title: "O Reto Dever",
+        sub: "Monte Cadmo",
+        imgs: ["./imagens/05.jpeg", "./imagens/05.jpg"],
+        audio: "./musicas/05 - O Reto Dever (Monte Cadmo).mp3"
+      },
+      {
+        num: "06",
+        title: "A Fortaleza da Razão",
+        sub: "Tomar",
+        imgs: ["./imagens/06.jpeg", "./imagens/06.jpg"],
+        audio: "./musicas/06 - A Fortaleza da Razão (Tomar).mp3"
+      },
+      {
+        num: "07",
+        title: "O Choque do Logos",
+        sub: "Montgisard",
+        imgs: ["./imagens/07.jpg", "./imagens/07.jpeg"],
+        audio: "./musicas/07 - O Choque do Logos (Montgisard).mp3"
+      },
+      {
+        num: "08",
+        title: "A Flor sobre as Cinzas",
+        sub: "Jacquelin de Mailly",
+        imgs: ["./imagens/08.jpg", "./imagens/08.jpeg"],
+        audio: "./musicas/08 - A Flor sobre as Cinzas (Jacquelin de Mailly).mp3"
+      },
+      {
+        num: "09",
+        title: "A Estultícia Alheia",
+        sub: "Al-Mansura",
+        imgs: ["./imagens/09.jpeg", "./imagens/09.jpg"],
+        audio: "./musicas/09 - A Estultícia Alheia (Al-Mansura).mp3"
+      },
+      {
+        num: "10",
+        title: "O Freio da Ira",
+        sub: "Arsuf",
+        imgs: ["./imagens/10.jpeg", "./imagens/10.jpg"],
+        audio: "./musicas/10 - O Freio da Ira (Arsuf).mp3"
+      },
+      {
+        num: "11",
+        title: "A Poeira e a Virtude",
+        sub: "Acre",
+        imgs: ["./imagens/11.jpeg", "./imagens/11.jpg"],
+        audio: "./musicas/11 - A Poeira e a Virtude (Acre).mp3"
+      },
+      {
+        num: "12",
+        title: "A Justiça Inviolável",
+        sub: "Jacques de Molay",
+        imgs: ["./imagens/12.jpg", "./imagens/12.jpeg"],
+        audio: "./musicas/12 - A Justiça Inviolável (Jacques de Molay).mp3"
+      }
+    ];
+
+    function bindSmartImage(imgElement, candidates) {
+      let attempt = 0;
+      function tryNext() {
+        if (attempt < candidates.length) {
+          const nextSrc = candidates[attempt++];
+          imgElement.src = nextSrc;
+        } else {
+          imgElement.src = "./imagens/capa-album.jpg";
+        }
+      }
+      imgElement.onerror = tryNext;
+      tryNext();
+    }
+
+    const swiperWrapper = document.getElementById("swiperWrapper");
+    playlist.forEach((track, idx) => {
+      const slide = document.createElement("div");
+      slide.className = "swiper-slide";
+      slide.dataset.trackIndex = idx;
+
+      const img = document.createElement("img");
+      img.alt = `Faixa ${track.num} - ${track.title}`;
+      bindSmartImage(img, track.imgs);
+
+      const badge = document.createElement("div");
+      badge.className = "slide-badge";
+      badge.textContent = `${track.num} • ${track.title}`;
+
+      slide.appendChild(img);
+      slide.appendChild(badge);
+      swiperWrapper.appendChild(slide);
+    });
+
+    const swiper = new Swiper(".mySwiper", {
+      effect: "coverflow",
+      grabCursor: true,
+      centeredSlides: true,
+      slidesPerView: 3,
+      initialSlide: 0,
+      loop: true,
+      coverflowEffect: {
+        rotate: 22,
+        stretch: 0,
+        depth: 85,
+        modifier: 1,
+        slideShadows: false
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        dynamicBullets: true
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      }
+    });
+
+    const audioEl = document.getElementById("audioEl");
+    const mobileCover = document.getElementById("mobileCover");
+    const trackCounter = document.getElementById("trackCounter");
+    const trackName = document.getElementById("trackName");
+    const trackSub = document.getElementById("trackSub");
+    const seekBar = document.getElementById("seekBar");
+    const curTime = document.getElementById("curTime");
+    const durTime = document.getElementById("durTime");
+    const playBtn = document.getElementById("playBtn");
+    const crossGlowPath = document.getElementById("crossGlowPath");
+
+    let activeTrackIdx = 0;
+    let isPlaying = false;
+    let isSyncingSwiper = false;
+
+    function fmtTime(seconds) {
+      if (isNaN(seconds) || !isFinite(seconds)) return "0:00";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    }
+
+    function setPlayingState(playing) {
+      isPlaying = playing;
+      playBtn.classList.toggle("is-playing", playing);
+      crossGlowPath.setAttribute("opacity", playing ? "1" : "0.65");
+      playBtn.setAttribute("aria-label", playing ? "Pausar música" : "Tocar música");
+    }
+
+    function loadTrack(idx, autoPlay = false, syncSlide = false) {
+      const total = playlist.length;
+      activeTrackIdx = ((idx % total) + total) % total;
+      const track = playlist[activeTrackIdx];
+
+      bindSmartImage(mobileCover, track.imgs);
+
+      trackCounter.textContent = `FAIXA ${track.num} DE ${total}`;
+      trackName.textContent = track.title;
+      trackSub.textContent = track.sub;
+
+      audioEl.src = encodeURI(track.audio);
+      seekBar.value = 0;
+      curTime.textContent = "0:00";
+      durTime.textContent = "0:00";
+
+      if (syncSlide && swiper) {
+        isSyncingSwiper = true;
+        swiper.slideToLoop(activeTrackIdx, 450, false);
+        setTimeout(() => { isSyncingSwiper = false; }, 500);
+      }
+
+      if (autoPlay || isPlaying) {
+        audioEl.play().then(() => {
+          setPlayingState(true);
+        }).catch(() => {});
+      }
+    }
+
+    swiper.on("slideChangeTransitionStart", () => {
+      if (isSyncingSwiper) return;
+      const realIdx = swiper.realIndex;
+      if (realIdx !== activeTrackIdx) {
+        loadTrack(realIdx, isPlaying, false);
+      }
+    });
+
+    document.querySelectorAll(".swiper-slide").forEach(slide => {
+      slide.addEventListener("click", () => {
+        const idx = Number(slide.dataset.trackIndex);
+        if (!isNaN(idx) && idx !== activeTrackIdx) {
+          loadTrack(idx, isPlaying, true);
+        }
+      });
+    });
+
+    playBtn.addEventListener("click", () => {
+      if (isPlaying) {
+        audioEl.pause();
+        setPlayingState(false);
+      } else {
+        audioEl.play().then(() => {
+          setPlayingState(true);
+        }).catch(() => {});
+      }
+    });
+
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      loadTrack(activeTrackIdx + 1, isPlaying, true);
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      loadTrack(activeTrackIdx - 1, isPlaying, true);
+    });
+
+    audioEl.addEventListener("loadedmetadata", () => {
+      durTime.textContent = fmtTime(audioEl.duration);
+    });
+
+    audioEl.addEventListener("timeupdate", () => {
+      if (!isNaN(audioEl.duration) && audioEl.duration > 0) {
+        seekBar.value = (audioEl.currentTime / audioEl.duration) * 100;
+        curTime.textContent = fmtTime(audioEl.currentTime);
+      }
+    });
+
+    seekBar.addEventListener("input", () => {
+      if (!isNaN(audioEl.duration) && audioEl.duration > 0) {
+        audioEl.currentTime = (seekBar.value / 100) * audioEl.duration;
+      }
+    });
+
+    audioEl.addEventListener("ended", () => {
+      loadTrack(activeTrackIdx + 1, true, true);
+    });
+
+    loadTrack(0, false, true);
+  </script>
+</body>
+</html>
