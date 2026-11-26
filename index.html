@@ -12,12 +12,11 @@
   <style>
     :root {
       --gold: #d4af37;
-      --gold-soft: rgba(212, 175, 55, 0.45);
+      --gold-soft: rgba(212, 175, 55, 0.55);
       --crimson: #8b1e1e;
       --crimson-glow: #c82824;
       --text: #f6f2e9;
       --text-dim: #e3dcd0;
-      --panel-bg: rgba(10, 12, 18, 0.72);
     }
 
     * {
@@ -31,92 +30,87 @@
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      background-color: #0b0d12;
+      background-color: #050608;
       position: relative;
     }
 
-    /* Imagem de fundo normal: sem desfoque e sem escurecimento */
+    /* Imagem de fundo inteira (sem cortes, sem desfoque e sem escurecimento) */
     .album-backdrop {
       position: fixed;
       inset: 0;
+      background-color: #050608;
       background-image: url('./imagens/capa-album.jpg');
-      background-size: cover;
-      background-position: center;
+      background-size: contain;
+      background-position: center center;
       background-repeat: no-repeat;
       z-index: -1;
     }
 
-    header {
-      text-align: center;
-      padding: 16px 20px 6px;
-      z-index: 2;
-    }
-
-    header h1 {
+    /* Botão de Portfólio (Desktop: canto superior direito) */
+    .portfolio-btn {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      z-index: 10;
       font-family: 'Cinzel', serif;
-      font-size: clamp(1.35rem, 2.5vw, 2.05rem);
-      letter-spacing: 3px;
-      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 22px rgba(0, 0, 0, 0.75);
+      text-decoration: none;
+      color: var(--gold);
+      background: rgba(10, 12, 18, 0.72);
+      border: 1px solid var(--gold-soft);
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75);
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
     }
 
-    header p {
-      font-size: 0.96rem;
-      color: var(--text-dim);
-      font-style: italic;
-      margin-top: 2px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
+    .portfolio-btn:hover {
+      color: #fff;
+      border-color: var(--gold);
+      background: rgba(139, 30, 30, 0.75);
+      transform: translateY(-1px);
     }
 
-    .app-main {
-      width: 100%;
-      max-width: 980px;
-      padding: 4px 20px 22px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      z-index: 2;
-    }
-
-    /* ================= DESKTOP: SLIDER 1:1 MENOR E MAIS ABAIXO ================= */
+    /* ================= DESKTOP: CARROSSEL QUADRADO 1:1 A ~25% DA MARGEM INFERIOR ================= */
     .desktop-player {
-      width: 100%;
-      max-width: 780px;
-      margin-top: 32px;
+      position: fixed;
+      left: 50%;
+      bottom: 24vh;
+      transform: translateX(-50%);
+      width: 588px; /* 3 slides de 196px = 588px exatos para proporção 1:1 real */
+      max-width: 92vw;
       display: flex;
       flex-direction: column;
       align-items: center;
+      z-index: 2;
     }
 
     .swiper.mySwiper {
       width: 100%;
-      padding-top: 10px;
-      padding-bottom: 32px;
+      padding-top: 8px;
+      padding-bottom: 28px;
     }
 
     .swiper-slide {
-      width: 196px;
-      height: 196px;
+      width: 196px !important;
+      height: 196px !important;
       aspect-ratio: 1 / 1;
       border-radius: 10px;
       overflow: hidden;
       position: relative;
       background: #11131a;
       border: 2px solid var(--gold-soft);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.78);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.82);
       transition: border-color 0.3s ease, box-shadow 0.3s ease;
       cursor: pointer;
     }
 
     .swiper-slide-active {
       border-color: var(--gold);
-      box-shadow: 0 0 24px rgba(200, 40, 36, 0.6), 0 14px 32px rgba(0, 0, 0, 0.88);
+      box-shadow: 0 0 24px rgba(200, 40, 36, 0.65), 0 14px 32px rgba(0, 0, 0, 0.9);
     }
 
     .swiper-slide img {
@@ -136,8 +130,8 @@
       padding: 10px 8px 6px;
       background: linear-gradient(to top, rgba(6, 7, 11, 0.88), rgba(6, 7, 11, 0));
       font-family: 'Cinzel', serif;
-      font-size: 0.68rem;
-      letter-spacing: 0.8px;
+      font-size: 0.66rem;
+      letter-spacing: 0.7px;
       color: var(--gold);
       text-align: center;
       opacity: 0;
@@ -152,13 +146,17 @@
     .swiper .swiper-button-next,
     .swiper .swiper-button-prev {
       color: var(--gold);
-      transform: scale(0.78);
+      transform: scale(0.75);
+    }
+
+    .swiper-pagination {
+      bottom: 4px !important;
     }
 
     .swiper-pagination .swiper-pagination-bullet {
-      width: 10px;
-      height: 10px;
-      background: rgba(255, 255, 255, 0.55);
+      width: 8px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.6);
       opacity: 1;
     }
 
@@ -168,15 +166,170 @@
       transform: scale(1.15);
     }
 
-    /* ================= MOBILE: FORMATO CLÁSSICO SIMPLES 1:1 ================= */
+    /* ================= DESKTOP: RÉGUA DE TEMPO E COMANDOS COMPACTOS (25% DAS LATERAIS, 5-10% DA BASE) ================= */
+    .bottom-dock {
+      position: fixed;
+      left: 25%;
+      right: 25%;
+      bottom: 5vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 3;
+    }
+
+    .track-meta {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .track-counter {
+      font-family: 'Cinzel', serif;
+      font-size: 0.68rem;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      text-shadow: 0 2px 6px #000, 0 0 12px #000;
+    }
+
+    .track-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(0.98rem, 1.7vw, 1.25rem);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      text-shadow: 0 2px 8px #000, 0 0 14px #000;
+    }
+
+    .track-sub {
+      font-size: 0.86rem;
+      font-style: italic;
+      color: var(--text-dim);
+      text-shadow: 0 2px 6px #000, 0 0 12px #000;
+    }
+
+    /* Sem retângulo/caixa de fundo: apenas linha de tempo, tempos e comandos compactos */
+    .player-console {
+      width: 100%;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 2px 0 0;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .time-txt {
+      font-family: monospace;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text);
+      min-width: 34px;
+      text-align: center;
+      text-shadow: 0 1px 6px #000, 0 0 10px #000;
+    }
+
+    input[type="range"]#seekBar {
+      -webkit-appearance: none;
+      appearance: none;
+      flex: 1;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]#seekBar::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.95), 0 0 4px #000;
+      cursor: pointer;
+    }
+
+    .cmd-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .cmd-btn {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.95));
+      transition: transform 0.2s ease, color 0.2s ease;
+    }
+
+    .cmd-btn:hover {
+      color: var(--gold);
+      transform: scale(1.12);
+    }
+
+    .cmd-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    /* Botão central compacto com a Cruz Escarlate */
+    .cmd-cross {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(20, 12, 14, 0.85) 0%, rgba(10, 10, 14, 0.65) 100%);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 16px rgba(200, 40, 36, 0.65);
+      position: relative;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .cmd-cross:hover {
+      transform: scale(1.08);
+      border-color: #fff;
+      box-shadow: 0 0 24px rgba(200, 40, 36, 0.9), 0 0 12px rgba(212, 175, 55, 0.65);
+    }
+
+    .cmd-cross.is-playing {
+      box-shadow: 0 0 26px rgba(200, 40, 36, 0.95), 0 0 14px rgba(212, 175, 55, 0.75);
+    }
+
+    .cmd-cross svg.templar-cross {
+      width: 32px;
+      height: 32px;
+      filter: drop-shadow(0 0 6px rgba(200, 40, 36, 0.9));
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .cmd-cross.is-playing svg.templar-cross {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 10px rgba(235, 50, 45, 1));
+    }
+
+    /* ================= MOBILE: FORMATO CLÁSSICO PRESERVADO + BOTÃO PORTFÓLIO ================= */
     .mobile-player {
       display: none;
       width: 100%;
       max-width: 340px;
       flex-direction: column;
       align-items: center;
-      margin-top: 16px;
-      margin-bottom: 10px;
+      margin-top: 22px;
+      margin-bottom: 14px;
     }
 
     .mobile-cover-frame {
@@ -188,7 +341,7 @@
       border-radius: 10px;
       overflow: hidden;
       border: 2px solid var(--gold);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8);
       background: #11131a;
     }
 
@@ -201,154 +354,17 @@
       display: block;
     }
 
-    /* ================= INFORMAÇÕES E CONTROLES COMPARTILHADOS ================= */
-    .track-meta {
-      text-align: center;
-      max-width: 640px;
-      margin-bottom: 10px;
-    }
-
-    .track-counter {
-      font-family: 'Cinzel', serif;
-      font-size: 0.74rem;
-      letter-spacing: 2px;
-      color: var(--gold);
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-    }
-
-    .track-name {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
-      font-weight: 800;
-      color: #fff;
-      margin-top: 2px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.95);
-    }
-
-    .track-sub {
-      font-size: 0.95rem;
-      font-style: italic;
-      color: var(--text-dim);
-      margin-top: 1px;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95);
-    }
-
-    .player-console {
-      width: 100%;
-      max-width: 480px;
-      background: var(--panel-bg);
-      backdrop-filter: blur(6px);
-      border: 1px solid var(--gold-soft);
-      border-radius: 12px;
-      padding: 12px 18px 16px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
-    }
-
-    .timeline-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .time-txt {
-      font-family: monospace;
-      font-size: 0.8rem;
-      color: var(--text-dim);
-      min-width: 36px;
-      text-align: center;
-    }
-
-    input[type="range"]#seekBar {
-      -webkit-appearance: none;
-      appearance: none;
-      flex: 1;
-      height: 5px;
-      border-radius: 4px;
-      background: rgba(255, 255, 255, 0.25);
-      outline: none;
-      cursor: pointer;
-    }
-
-    input[type="range"]#seekBar::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 8px rgba(212, 175, 55, 0.85);
-      cursor: pointer;
-    }
-
-    .cmd-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-    }
-
-    .cmd-btn {
-      background: transparent;
-      border: none;
-      color: var(--text);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease, color 0.2s ease;
-    }
-
-    .cmd-btn:hover {
-      color: var(--gold);
-      transform: scale(1.12);
-    }
-
-    .cmd-btn svg {
-      width: 26px;
-      height: 26px;
-      fill: currentColor;
-    }
-
-    /* Botão central com a Cruz Escarlate do peito do Templário */
-    .cmd-cross {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(20, 12, 14, 0.88) 0%, rgba(10, 10, 14, 0.72) 100%);
-      border: 2px solid var(--gold);
-      box-shadow: 0 0 18px rgba(200, 40, 36, 0.55);
-      position: relative;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    }
-
-    .cmd-cross:hover {
-      transform: scale(1.08);
-      border-color: #fff;
-      box-shadow: 0 0 26px rgba(200, 40, 36, 0.85), 0 0 12px rgba(212, 175, 55, 0.55);
-    }
-
-    .cmd-cross.is-playing {
-      box-shadow: 0 0 28px rgba(200, 40, 36, 0.9), 0 0 14px rgba(212, 175, 55, 0.65);
-    }
-
-    .cmd-cross svg.templar-cross {
-      width: 40px;
-      height: 40px;
-      filter: drop-shadow(0 0 6px rgba(200, 40, 36, 0.85));
-      transition: transform 0.25s ease, filter 0.25s ease;
-    }
-
-    .cmd-cross.is-playing svg.templar-cross {
-      transform: scale(1.05);
-      filter: drop-shadow(0 0 10px rgba(235, 50, 45, 0.95));
-    }
-
     @media (max-width: 768px) {
       body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: flex-start;
-        padding-top: 12px;
+        padding: 16px 16px 28px;
+      }
+
+      .album-backdrop {
+        background-size: cover;
       }
 
       .desktop-player {
@@ -359,8 +375,39 @@
         display: flex;
       }
 
+      .bottom-dock {
+        position: static;
+        width: 100%;
+        max-width: 360px;
+        margin-top: 4px;
+      }
+
       .player-console {
+        background: rgba(10, 12, 18, 0.72);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        border-radius: 12px;
         padding: 12px 14px 16px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+      }
+
+      .cmd-cross {
+        width: 58px;
+        height: 58px;
+      }
+
+      .cmd-cross svg.templar-cross {
+        width: 38px;
+        height: 38px;
+      }
+
+      .portfolio-btn {
+        position: static;
+        margin-top: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 22px;
       }
     }
   </style>
@@ -368,37 +415,31 @@
 <body>
   <div class="album-backdrop"></div>
 
-  <header>
-    <h1>Pela Cruz Escarlate</h1>
-    <p>Ópera Sacra Templária • 12 Faixas</p>
-  </header>
+  <!-- Versão Desktop: Slider quadrado 1:1 posicionado mais abaixo -->
+  <section class="desktop-player" aria-label="Player em Slider">
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper" id="swiperWrapper"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
 
-  <main class="app-main">
-    <!-- Versão Desktop: Slider 1:1 com 3 capinhas -->
-    <section class="desktop-player" aria-label="Player em Slider">
-      <div class="swiper mySwiper">
-        <div class="swiper-wrapper" id="swiperWrapper"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
-      </div>
-    </section>
+  <!-- Versão Celular: Formato clássico simples 1:1 -->
+  <section class="mobile-player" aria-label="Player Clássico">
+    <div class="mobile-cover-frame">
+      <img id="mobileCover" src="./imagens/01.jpg" alt="Capa da faixa atual" />
+    </div>
+  </section>
 
-    <!-- Versão Celular: Formato clássico simples 1:1 -->
-    <section class="mobile-player" aria-label="Player Clássico">
-      <div class="mobile-cover-frame">
-        <img id="mobileCover" src="./imagens/01.jpg" alt="Capa da faixa atual" />
-      </div>
-    </section>
-
-    <!-- Informações da música atual -->
+  <!-- Informações da faixa + Régua de tempo e comandos compactos -->
+  <div class="bottom-dock">
     <div class="track-meta">
       <div class="track-counter" id="trackCounter">FAIXA 01 DE 12</div>
       <div class="track-name" id="trackName">O Pão, a Água e o Abrigo</div>
       <div class="track-sub" id="trackSub">A Conversão</div>
     </div>
 
-    <!-- Barra de tempo e comandos -->
     <div class="player-console">
       <div class="timeline-row">
         <span class="time-txt" id="curTime">0:00</span>
@@ -411,7 +452,7 @@
           <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
         </button>
 
-        <!-- Botão central: Cruz Escarlate do peito do Templário (Play / Pause) -->
+        <!-- Botão central: Cruz Escarlate (Play / Pause) -->
         <button class="cmd-btn cmd-cross" id="playBtn" aria-label="Tocar ou pausar" title="Tocar / Pausar">
           <svg class="templar-cross" viewBox="0 0 100 100" aria-hidden="true">
             <path
@@ -435,7 +476,12 @@
         </button>
       </div>
     </div>
-  </main>
+  </div>
+
+  <!-- Botão de retorno ao Portfólio -->
+  <a class="portfolio-btn" href="https://alexcorvete.github.io/Portf-lio/" target="_blank" rel="noopener noreferrer">
+    Portfólio
+  </a>
 
   <audio id="audioEl" preload="metadata"></audio>
 
@@ -565,7 +611,7 @@
       effect: "coverflow",
       grabCursor: true,
       centeredSlides: true,
-      slidesPerView: 3,
+      slidesPerView: "auto",
       initialSlide: 0,
       loop: true,
       coverflowEffect: {
